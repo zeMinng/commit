@@ -205,4 +205,44 @@ const works = computed(() => {
     border-radius: 6px;
   }
 }
+
+@media (max-width: 640px) {
+  .works-page {
+    padding: 1rem 0.75rem;
+
+    &__header {
+      margin-bottom: 1rem;
+    }
+
+    &__title {
+      font-size: 1.35rem;
+    }
+
+    &__empty {
+      padding: 1.25rem 0;
+    }
+  }
+
+  .work-card {
+    &__link {
+      padding: 0.85rem 0.85rem;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    &__thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+    }
+
+    &__title {
+      font-size: 1rem;
+    }
+
+    &__desc {
+      font-size: 0.85rem;
+    }
+  }
+}
 </style>

@@ -15,10 +15,42 @@ const paginatedPosts = computed(() => {
   return allPosts.slice(start, start + pageSize)
 })
 
-const pages = computed(() => {
-  const arr = []
-  for (let i = 1; i <= totalPages.value; i++) arr.push(i)
-  return arr
+const pageItems = computed(() => {
+  const total = totalPages.value
+  const current = currentPage.value
+  const maxNums = 5
+
+  if (total <= maxNums) {
+    return Array.from({ length: total }, (_, i) => i + 1)
+  }
+
+  const set = new Set()
+  const add = (n) => {
+    if (n >= 1 && n <= total) set.add(n)
+  }
+
+  add(1)
+  add(total)
+  add(current)
+
+  let dist = 1
+  while (set.size < maxNums && (current - dist >= 1 || current + dist <= total)) {
+    add(current - dist)
+    if (set.size >= maxNums) break
+    add(current + dist)
+    dist++
+  }
+
+  const nums = Array.from(set).sort((a, b) => a - b)
+  const result = []
+  for (let i = 0; i < nums.length; i++) {
+    const n = nums[i]
+    const prev = nums[i - 1]
+    if (i > 0 && n - prev > 1) result.push('…')
+    result.push(n)
+  }
+
+  return result
 })
 
 function goToPage(page) {
@@ -94,17 +126,25 @@ function goToPage(page) {
         上一页
       </button>
       <span class="posts__pagination-pages">
-        <button
-          v-for="page in pages"
-          :key="page"
-          type="button"
-          class="pagination-btn pagination-btn--num"
-          :class="{ 'pagination-btn--active': page === currentPage }"
-          :aria-current="page === currentPage ? 'page' : undefined"
-          @click="goToPage(page)"
-        >
-          {{ page }}
-        </button>
+        <template v-for="(item, idx) in pageItems">
+          <span
+            v-if="item === '…'"
+            :key="`e-${idx}`"
+            class="pagination-ellipsis"
+            aria-hidden="true"
+          >…</span>
+          <button
+            v-else
+            :key="`p-${item}`"
+            type="button"
+            class="pagination-btn pagination-btn--num"
+            :class="{ 'pagination-btn--active': item === currentPage }"
+            :aria-current="item === currentPage ? 'page' : undefined"
+            @click="goToPage(item)"
+          >
+            {{ item }}
+          </button>
+        </template>
       </span>
       <button
         type="button"
@@ -271,6 +311,7 @@ function goToPage(page) {
   color: var(--vp-c-text-1);
   cursor: pointer;
   transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
 
   &:hover:not(:disabled) {
     border-color: var(--vp-c-brand-1);
@@ -301,6 +342,17 @@ function goToPage(page) {
   }
 }
 
+.pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0 0.35rem;
+  color: var(--vp-c-text-3);
+  user-select: none;
+}
+
 @media (max-width: 640px) {
   .posts {
     padding: 1rem 0.75rem;
@@ -320,9 +372,18 @@ function goToPage(page) {
     &__pagination {
       margin-top: 1.5rem;
       padding-top: 1rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-areas:
+        "prev next"
+        "pages pages";
+      align-items: center;
+      justify-items: stretch;
+      gap: 0.5rem;
     }
 
     &__pagination-pages {
+      grid-area: pages;
       flex-wrap: wrap;
       justify-content: center;
     }
@@ -347,12 +408,20 @@ function goToPage(page) {
     min-width: 2.5rem;
     height: 2.5rem;
     border-radius: 10px;
+    font-size: 0.8rem;
 
     &--prev,
     &--next {
-      flex: 1;
       min-width: 0;
-      padding: 0 0.75rem;
+      padding: 0 0.5rem;
+    }
+
+    &--prev {
+      grid-area: prev;
+    }
+
+    &--next {
+      grid-area: next;
     }
   }
 }
