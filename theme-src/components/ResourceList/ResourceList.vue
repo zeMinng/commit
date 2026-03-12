@@ -74,28 +74,28 @@ function isExpanded(category) {
           <div v-show="isExpanded(category)" class="resource-section__body">
             <ul class="resource-section__items">
               <li v-for="item in items" :key="item.url" class="resource-item">
-                <div class="resource-item__row">
+                <div class="resource-item__content">
                   <span class="resource-item__title">{{ item.title }}</span>
-                  <span class="resource-item__actions">
-                    <a
-                      v-if="item.link"
-                      :href="item.link"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="resource-item__btn resource-item__btn--link"
-                    >链接</a>
-                    <a
-                      v-if="item.download"
-                      :href="item.download"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="resource-item__btn resource-item__btn--download"
-                    >下载</a>
-                  </span>
+                  <p v-if="item.description" class="resource-item__desc">
+                    {{ item.description }}
+                  </p>
                 </div>
-                <p v-if="item.description" class="resource-item__desc">
-                  {{ item.description }}
-                </p>
+                <div v-if="item.link || item.download" class="resource-item__actions">
+                  <a
+                    v-if="item.link"
+                    :href="item.link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="resource-item__btn resource-item__btn--link"
+                  >链接</a>
+                  <a
+                    v-if="item.download"
+                    :href="item.download"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="resource-item__btn resource-item__btn--download"
+                  >下载</a>
+                </div>
               </li>
             </ul>
           </div>
@@ -142,7 +142,7 @@ function isExpanded(category) {
     margin-bottom: 1rem;
     padding: 0.5rem 0;
     position: sticky;
-    top: 0;
+    top: var(--vp-nav-height, 0px);
     z-index: 2;
     background: var(--vp-c-bg);
   }
@@ -232,36 +232,40 @@ function isExpanded(category) {
 .resource-item {
   padding: 0.4rem 0.75rem;
   border-bottom: 1px solid var(--vp-c-divider);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 0.75rem;
+  row-gap: 0.35rem;
+  align-items: center;
 
   &:last-child {
     border-bottom: none;
   }
 
-  &__row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
+  &__content {
+    min-width: 0;
   }
 
   &__title {
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--vp-c-text-1);
-    flex: 1;
+    display: block;
     min-width: 0;
   }
 
   &__actions {
     display: flex;
-    gap: 0.35rem;
+    gap: 0.4rem;
     flex-shrink: 0;
+    align-items: flex-start;
+    justify-content: flex-end;
   }
 
   &__desc {
     font-size: 0.8rem;
     color: var(--vp-c-text-2);
-    margin: 0.2rem 0 0;
+    margin: 0.25rem 0 0;
     padding-left: 0;
     line-height: 1.45;
   }
@@ -287,6 +291,72 @@ function isExpanded(category) {
       &:hover {
         background: var(--vp-c-brand-1);
         color: #fff;
+      }
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .resource-page {
+    padding: 1rem 0.75rem;
+
+    &__header {
+      margin-bottom: 0.85rem;
+    }
+
+    &__title {
+      font-size: 1.35rem;
+    }
+
+    &__empty {
+      padding: 1.25rem 0;
+    }
+
+    &__nav {
+      margin-bottom: 0.75rem;
+      padding: 0.4rem 0;
+      gap: 0.35rem;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    &__nav-link {
+      white-space: nowrap;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+    }
+  }
+
+  .resource-section {
+    &__head {
+      padding: 0.65rem 0.75rem;
+    }
+  }
+
+  .resource-item {
+    padding: 0.55rem 0.75rem;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.5rem;
+
+    &__actions {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    &__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.25rem;
+      padding: 0 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+
+      &:only-child {
+        grid-column: 1 / -1;
       }
     }
   }

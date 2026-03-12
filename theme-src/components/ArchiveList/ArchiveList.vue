@@ -170,4 +170,40 @@ const archivesWithPosts = computed(() => {
     flex-shrink: 0;
   }
 }
+
+@media (max-width: 640px) {
+  .archive-page {
+    padding: 1rem 0.75rem;
+
+    &__header {
+      margin-bottom: 1rem;
+    }
+
+    &__title {
+      font-size: 1.35rem;
+    }
+
+    &__empty {
+      padding: 1.25rem 0;
+    }
+
+    &__list {
+      gap: 1rem;
+    }
+  }
+
+  .archive-section {
+    &__name {
+      font-size: 0.95rem;
+    }
+
+    &__item {
+      padding: 0.6rem 0.75rem;
+    }
+
+    &__date {
+      font-size: 0.72rem;
+    }
+  }
+}
 </style>

@@ -207,4 +207,42 @@ const currentPosts = computed(() => {
     flex-shrink: 0;
   }
 }
+
+@media (max-width: 640px) {
+  .tags-page {
+    padding: 1rem 0.75rem;
+
+    &__header {
+      margin-bottom: 0.85rem;
+    }
+
+    &__title {
+      font-size: 1.35rem;
+    }
+
+    &__empty {
+      padding: 1.25rem 0;
+    }
+
+    &__tiles {
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .tag-tile {
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+  }
+
+  .tag-section {
+    &__item {
+      padding: 0.6rem 0.75rem;
+    }
+
+    &__date {
+      font-size: 0.72rem;
+    }
+  }
+}
 </style>

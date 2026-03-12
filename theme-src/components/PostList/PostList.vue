@@ -274,7 +274,6 @@ function goToPage(page) {
 
   &:hover:not(:disabled) {
     border-color: var(--vp-c-brand-1);
-    color: var(--vp-c-brand-1);
   }
 
   &--num {
@@ -299,6 +298,62 @@ function goToPage(page) {
   &:disabled {
     opacity: 0.45;
     cursor: not-allowed;
+  }
+}
+
+@media (max-width: 640px) {
+  .posts {
+    padding: 1rem 0.75rem;
+
+    &__header {
+      margin-bottom: 1rem;
+    }
+
+    &__title {
+      font-size: 1.35rem;
+    }
+
+    &__empty {
+      padding: 1.25rem 0;
+    }
+
+    &__pagination {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+    }
+
+    &__pagination-pages {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+
+  .post-card {
+    &__link {
+      padding: 0.85rem 0.85rem;
+    }
+
+    &__title {
+      font-size: 1rem;
+    }
+
+    &__footer {
+      margin-top: 0.75rem;
+      padding-top: 0.65rem;
+    }
+  }
+
+  .pagination-btn {
+    min-width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 10px;
+
+    &--prev,
+    &--next {
+      flex: 1;
+      min-width: 0;
+      padding: 0 0.75rem;
+    }
   }
 }
 </style>
